@@ -1,0 +1,382 @@
+/* Basic reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #343541; /* Similar to ChatGPT's background */
+  color: #fff;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Container that holds sidebar + main chat area */
+.container {
+  width: 90%;
+  max-width: 1200px;
+  height: 90vh;
+  display: flex;
+  border-radius: 8px;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Toggle sidebar button with dynamic icon */
+.toggle-sidebar-btn {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background: #202123;
+  border: 1px solid #3e3f3f;
+  color: #fff;
+  cursor: pointer;
+  font-size: 16px;
+  border-radius: 4px;
+  padding: 6px 10px;
+  z-index: 999; /* keep above everything */
+}
+
+/* SIDEBAR */
+.sidebar {
+  width: 260px;
+  background-color: #202123;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.sidebar-header {
+  padding: 20px;
+  border-bottom: 1px solid #3e3f3f;
+  text-align: center;
+}
+
+.new-chat-btn {
+  width: 90%;
+  margin: 10px auto;
+  padding: 10px;
+  background-color: #3e3f3f;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.new-chat-btn:hover {
+  background-color: #4b4c4c;
+}
+
+.model-select {
+  margin: 10px auto;
+  width: 90%;
+  color: #ccc;
+  display: flex;
+  flex-direction: column;
+}
+
+.model-select label {
+  margin-bottom: 5px;
+  font-size: 14px;
+}
+
+.model-select select {
+  padding: 5px;
+  border-radius: 4px;
+  border: 1px solid #555;
+  background-color: #3e3f3f;
+  color: #fff;
+}
+
+.hidden {
+  display: none !important;
+}
+
+#currentModelLabel {
+  margin-top: 5px;
+  font-size: 14px;
+  color: #fff;
+}
+
+/* The chat sessions list */
+.chat-sessions {
+  flex: 1;
+  margin: 10px;
+  overflow-y: auto;
+  border-top: 1px solid #3e3f3f;
+  padding-top: 10px;
+}
+
+/* Each chat session item in the sidebar (now with bin icon) */
+.chat-session-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px;
+  margin-bottom: 5px;
+  cursor: pointer;
+  border-radius: 5px;
+  background-color: #2f3031;
+  color: #fff;
+  font-size: 14px;
+}
+
+.chat-session-item:hover {
+  background-color: #404142;
+}
+
+.chat-session-item.active {
+  background-color: #565656;
+}
+
+/* Delete chat button (trash bin) */
+.delete-chat-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #fff;
+}
+
+/* MAIN CHAT AREA */
+.chat-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background-color: #444654; /* ChatGPT-like background */
+}
+
+/* Chat messages container */
+.chat-box {
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Chat message bubble styles */
+.message {
+  margin-bottom: 12px;
+  max-width: 75%;
+  padding: 12px;
+  border-radius: 8px;
+  line-height: 1.4;
+  word-wrap: break-word;
+  font-size: 14px;
+}
+
+/* User messages on the RIGHT */
+.user-message {
+  align-self: flex-end;
+  background-color: #4f4f4f;
+  color: #fff;
+  border-top-right-radius: 0;
+}
+
+/* AI messages on the LEFT */
+.ai-message {
+  align-self: flex-start;
+  background-color: #0b7fcf;
+  color: #fff;
+  border-top-left-radius: 0;
+}
+
+/* Document (PDF) messages on the RIGHT */
+.document-message {
+  align-self: flex-end;
+  background-color: #6d6d6d;
+  color: #fff;
+  border-top-right-radius: 0;
+  font-style: italic;
+}
+
+/* Chat input bar at bottom (now a column to hold file preview + row of inputs) */
+.chat-input-bar {
+  display: flex;
+  flex-direction: column;
+  background-color: #40414f;
+  padding: 10px;
+  gap: 10px;
+}
+
+/* Row that holds the pin button, text input, and send button */
+.chat-input-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+}
+
+/* Pin button */
+.pin-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #fff;
+  padding: 5px;
+  border-radius: 4px;
+}
+
+.pin-btn:hover {
+  background-color: #555;
+}
+
+/* Rounded text input, like ChatGPT */
+.chat-text-input {
+  flex: 1;
+  border: none;
+  border-radius: 999px;
+  padding: 10px 15px;
+  font-size: 14px;
+  color: #fff;
+  background-color: #555;
+  outline: none;
+}
+
+.send-btn {
+  background-color: #19c37d;
+  border: none;
+  border-radius: 4px;
+  color: #fff;
+  padding: 10px 16px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.send-btn:hover {
+  background-color: #18a56a;
+}
+
+.file-preview {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: #555;
+  padding: 6px 10px;
+  /* Slight roundness: 10px */
+  border-radius: 10px;
+  font-size: 14px;
+  /* Limit how wide this can go */
+  max-width: 250px;
+  /* Keep everything on one line */
+  white-space: nowrap;
+  overflow: hidden;
+}
+.file-preview.hidden {
+  display: none; /* We'll hide it if no file is selected */
+}
+
+/* The pink square for the doc icon or spinner */
+.file-preview-icon {
+  width: 28px;
+  height: 28px;
+  background-color: #ff5b77;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+}
+
+.pdf-icon-svg {
+  width: 16px;
+  height: 16px;
+  stroke: #fff;
+}
+
+/* Ellipsis for very long filenames */
+.file-preview-name {
+  flex: 1;
+  min-width: 0;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.remove-file-btn {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.remove-file-btn:hover {
+  color: #aaa;
+}
+
+/* File status (spinner/check) in the preview */
+.file-status {
+  font-size: 12px;
+  color: #ddd;
+}
+
+/* Spinner for upload */
+.spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid #fff;
+  border-top: 2px solid transparent;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* The doc bubble in the chat uses .file-message + .file-icon */
+.file-message {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.file-icon {
+  width: 32px;
+  height: 32px;
+  background-color: #ff5b77;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 6px;
+}
+
+.file-icon svg {
+  width: 20px;
+  height: 20px;
+  stroke: #fff;
+}
+
+/* Scrollbar styling for chat box & sessions list */
+.chat-box::-webkit-scrollbar,
+.chat-sessions::-webkit-scrollbar {
+  width: 6px;
+}
+
+.chat-box::-webkit-scrollbar-thumb,
+.chat-sessions::-webkit-scrollbar-thumb {
+  background-color: #888;
+  border-radius: 3px;
+}
+
+.chat-box::-webkit-scrollbar-track,
+.chat-sessions::-webkit-scrollbar-track {
+  background-color: #333;
+}
+
+/* Hide the sidebar when body has "sidebar-collapsed" */
+.sidebar-collapsed .sidebar {
+  display: none;
+}
+
+/* Expand the chat container to full width when sidebar is hidden */
+.sidebar-collapsed .chat-container {
+  width: 100%;
+  flex: none;
+}

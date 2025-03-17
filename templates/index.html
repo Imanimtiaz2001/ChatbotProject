@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Chat App</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+
+  <!-- Toggle sidebar button (with dynamic icon + tooltip) -->
+  <button 
+    id="toggleSidebarButton" 
+    class="toggle-sidebar-btn"
+    title="Close sidebar"
+  >
+    <!-- Open state icon: Square icon inside a box -->
+    <svg
+      width="20"
+      height="20"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    >
+      <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+      <rect x="9" y="9" width="6" height="6"></rect>
+    </svg>
+  </button>
+
+  <div class="container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <h2>Chat App</h2>
+      </div>
+
+      <button id="newChatButton" class="new-chat-btn">+ New Chat</button>
+
+      <!-- Model selection container -->
+      <div class="model-select" id="modelSelectContainer">
+        <!-- Label + dropdown for choosing model (visible if chat has no messages) -->
+        <label for="chatModel" id="modelSelectLabel">Select Model:</label>
+        <select id="chatModel">
+          <option value="pdf">PDFChat</option>
+          <option value="direct">DirectChat</option>
+        </select>
+
+        <!-- Read-only label showing current model (visible if chat already has messages) -->
+        <div id="currentModelLabel" class="hidden"></div>
+      </div>
+
+      <!-- List of saved chat sessions -->
+      <div class="chat-sessions" id="chatSessionsList">
+        <!-- Dynamically populated -->
+      </div>
+    </aside>
+
+    <!-- Main chat area -->
+    <main class="chat-container">
+      <div id="chatBox" class="chat-box">
+        <!-- All chat messages (user, AI, documents) will appear here -->
+      </div>
+
+      <!-- Chat input bar (now includes file preview inside) -->
+      <div class="chat-input-bar">
+        <!-- File preview container (hidden by default) -->
+        <div id="selectedFilePreview" class="file-preview hidden">
+          <div class="file-preview-icon" id="fileIconContainer"></div>
+          <span id="selectedFileName" class="file-preview-name"></span>
+          <div id="filePreviewStatus" class="file-status"></div>
+          <button id="removeFileButton" class="remove-file-btn" title="Remove file">✕</button>
+        </div>
+
+        <div class="chat-input-row">
+          <!-- Hidden file input triggered by the pin icon -->
+          <input
+            type="file"
+            id="fileInput"
+            accept=".pdf"
+            style="display: none;"
+          />
+
+          <!-- Pin (paperclip) icon to select PDFs -->
+          <button id="attachDocButton" class="pin-btn" title="Attach a PDF">
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M21.44 11.05l-9.19 9.2a5 5 0 01-7.07 0 5 5 0 010-7.07l9.2-9.19a3 3 0 014.24 4.24l-9.2 9.19a1 1 0 01-1.42-1.42l8.49-8.48" />
+            </svg>
+          </button>
+
+          <!-- Rounded text input -->
+          <input
+            type="text"
+            id="userQueryInput"
+            class="chat-text-input"
+            placeholder="Ask anything..."
+          />
+
+          <!-- Send button -->
+          <button id="sendMessageButton" class="send-btn">Send</button>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>
