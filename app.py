@@ -1,13 +1,13 @@
-from flask import Flask, request, jsonify , render_template
-from werkzeug.utils import secure_filename
-import os
-import PyPDF2
-from dotenv import load_dotenv
-from groq import Groq
-from pinecone import Pinecone, ServerlessSpec
-from sentence_transformers import SentenceTransformer
-import uuid
-from flask_cors import CORS  # Import CORS
+from flask import Flask, request, jsonify, render_template  # Flask for web framework
+from werkzeug.utils import secure_filename  # Secure filename handling
+import os  # OS module for file operations
+import PyPDF2  # Library to extract text from PDF files
+from dotenv import load_dotenv  # Load environment variables from a .env file
+from groq import Groq  # API client for Groq's AI model
+from pinecone import Pinecone, ServerlessSpec  # Pinecone for vector storage and retrieval
+from sentence_transformers import SentenceTransformer  # Sentence embedding model
+import uuid  # Library to generate unique identifiers
+from flask_cors import CORS  # Enable Cross-Origin Resource Sharing (CORS)
 
 # Load environment variables from .env file
 load_dotenv()
@@ -39,16 +39,16 @@ if INDEX_NAME not in pc.list_indexes().names():
     )
 pinecone_index = pc.Index(INDEX_NAME)
 
-# Instead of storing chat history in a dictionary, we now store metadata for uploaded documents.
+# Storing metadata for uploaded documents.
 # Each chat_id maps to a dict with key "documents", a list of document info.
 chat_sessions = {}  # Format: {chat_id: {"documents": [ { "document_id": ..., "file_path": ..., "extracted_text": ... }, ... ]}}
 
 def allowed_file(filename):
-    """Check if the uploaded file is a PDF."""
+    #Check if the uploaded file is a PDF.
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 def extract_text_from_pdf(pdf_path):
-    """Extract text from the given PDF file."""
+    #Extract text from the given PDF file.
     if not os.path.exists(pdf_path):
         return "Error: File not found."
     
@@ -62,7 +62,7 @@ def extract_text_from_pdf(pdf_path):
     return text.strip() if text else "No readable text found in the document."
 
 def process_text(document_context, user_query):
-    """Process text using the Groq API with the provided context and query."""
+    #Process text using the Groq API with the provided context and query.
     try:
         client = Groq(api_key=os.getenv('GROQ_API_KEY'))  # Initialize the Groq client
         chat_completion = client.chat.completions.create(
@@ -78,7 +78,7 @@ def process_text(document_context, user_query):
         return f"An error occurred with Groq: {str(e)}"
 
 def chunk_text(text, chunk_size=500, overlap=100):
-    """Splits the text into overlapping chunks."""
+    #Splits the text into overlapping chunks.
     chunks = []
     start = 0
     while start < len(text):
@@ -89,8 +89,7 @@ def chunk_text(text, chunk_size=500, overlap=100):
 
 def upsert_document_embeddings(chat_id, document_id, text):
     """Splits text into chunks, converts each chunk into an embedding, and upserts into Pinecone.
-       The vector IDs include the unique document_id to avoid overwriting embeddings.
-    """
+    The vector IDs include the unique document_id to avoid overwriting embeddings."""
     chunks = chunk_text(text)
     vectors = []
     for i, chunk in enumerate(chunks):
@@ -108,7 +107,7 @@ def index():
 
 @app.route('/upload', methods=['POST'])
 def upload_file():
-    """Handle file upload, extract text, store document metadata, and upsert document embeddings into Pinecone."""
+    #Handle file upload, extract text, store document metadata, and upsert document embeddings into Pinecone.
     chat_id = request.args.get('chat_id')  # Retrieve chat_id from request
     if not chat_id:
         return jsonify({'error': 'chat_id is required'}), 400
@@ -222,7 +221,7 @@ def chat():
 
 @app.route('/chatbot', methods=['POST'])
 def chatbot():
-    """Fallback endpoint for interacting with the chatbot without a PDF document."""
+    #Fallback endpoint for interacting with the chatbot without a PDF document.
     query = request.json.get('query')
     if not query:
         return jsonify({'error': 'No query provided'}), 400

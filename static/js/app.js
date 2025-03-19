@@ -50,7 +50,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const userQueryInput = document.getElementById("userQueryInput");
   const sendMessageButton = document.getElementById("sendMessageButton");
 
-  // File preview chip (now inside the chat input bar)
+  // File preview chip (inside the chat input bar)
   const selectedFilePreview = document.getElementById("selectedFilePreview");
   const selectedFileNameSpan = document.getElementById("selectedFileName");
   const filePreviewStatus = document.getElementById("filePreviewStatus");
@@ -245,7 +245,7 @@ document.addEventListener("DOMContentLoaded", function () {
     };
     saveSession(newSession);
 
-    // Now load this new chat session
+    // load this new chat session
     loadChatSession(currentChatId);
   }
 
@@ -470,7 +470,6 @@ document.addEventListener("DOMContentLoaded", function () {
       session.messages.push({ sender: "user", text: query });
       saveSession(session);
 
-      // Now the chat definitely has messages, so lock the model UI
       updateModelUIForSession(session);
 
       try {

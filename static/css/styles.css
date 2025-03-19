@@ -111,7 +111,7 @@ body {
   padding-top: 10px;
 }
 
-/* Each chat session item in the sidebar (now with bin icon) */
+/* Each chat session item in the sidebar (with bin icon) */
 .chat-session-item {
   display: flex;
   align-items: center;
@@ -194,7 +194,7 @@ body {
   font-style: italic;
 }
 
-/* Chat input bar at bottom (now a column to hold file preview + row of inputs) */
+/* Chat input bar at bottom (with a column to hold file preview + row of inputs) */
 .chat-input-bar {
   display: flex;
   flex-direction: column;
