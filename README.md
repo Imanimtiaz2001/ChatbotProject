@@ -144,3 +144,19 @@ Create a `Dockerfile` in the root directory:
    docker ps 
    docker stop <container_id>
    
+**Deployment on Render**
+Setup
+
+Push code to GitHub and connect it to Render.
+Select Docker as the environment.
+Configuration
+
+Set Dockerfile path: ./Dockerfile
+Add environment variables:
+FLASK_ENV=production
+KEY=your_secret_key
+PORT=5000
+**Deployment**
+
+Create Web Service and deploy.
+Access via the provided Render URL.
