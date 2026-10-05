@@ -1,162 +1,67 @@
-# ChatApp
+# ChatApp — PDF & Conversational AI
 
-ChatApp is an interactive web-based chat application supporting two modes:
-- **PDFChat**: Allows users to upload PDF files and interact with their content through AI-powered chat.
-- **DirectChat**: A standard chatbot for conversational queries.
+An AI-powered web application with two chat experiences: ask questions about uploaded PDF documents or use a general conversational assistant. The project combines a Flask backend with Groq-powered generation, Sentence Transformers embeddings, and Pinecone vector retrieval.
 
-The application integrates AI services for intelligent response generation, vector databases for context storage, and a user-friendly interface for seamless interaction.
+## Capabilities
 
----
+- **Chat with PDFs:** Upload a document and ask questions grounded in its content.
+- **Direct chat:** Send general questions without uploading a document.
+- **Session history:** Keep conversations associated with chat sessions.
+- **Semantic retrieval:** Embed document text and retrieve relevant context through Pinecone.
+- **Web interface:** HTML, CSS, and JavaScript frontend with a dark-mode experience.
 
-## Features
-- **PDF-based Conversational AI**: Upload PDFs and ask contextual questions based on the document's content.
-- **Direct Chat**: Engage in AI-powered conversations without document dependency.
-- **Session Management**: Saves chat history for reference.
-- **AI-Powered Responses**: Uses Groq API for intelligent responses.
-- **Vector Storage**: Embeds and retrieves document content using Pinecone.
-- **User-Friendly Interface**: Intuitive layout with dark mode support.
+## Technology stack
 
----
+| Area | Technology |
+| --- | --- |
+| Backend | Python, Flask |
+| LLM inference | Groq API |
+| Embeddings | Sentence Transformers |
+| Vector database | Pinecone |
+| Frontend | HTML, CSS, JavaScript |
 
-## Setup Instructions
+## Local setup
 
-### Prerequisites
-Ensure you have the following installed:
-- Python 3.8+
-- Node.js 
-- Pip & Virtual Environment
+1. Clone this repository and enter its directory.
+2. Create and activate a virtual environment.
+3. Install the Python dependencies from the repository's dependency file (if present).
+4. Configure the required credentials in environment variables. Do not commit API keys.
 
-### Installation
-1. Clone the repository:
-   
-   git clone https://github.com/your-repo/chatapp.git
-   cd chatapp
-   
+Example environment variables:
 
-2. Create and activate a virtual environment:
-   
-   python -m venv venv
-   source venv/bin/activate  # On Windows use `venv\Scripts\activate`
-   
+```env
+GROQ_API_KEY=your_groq_api_key
+PINECONE_API_KEY=your_pinecone_api_key
+```
 
-3. Install backend dependencies:
-   
-   pip install -r requirements.txt
-   
+5. Start the Flask application using the repository's application entry point and open the local URL printed by Flask.
 
-4. Set up environment variables in a `.env` file:
-   
-   GROQ_API_KEY=your_api_key
-   PINECONE_API_KEY=your_api_key
+> Configuration and startup details may need adjustment to match the current source tree and installed dependency versions. Never commit real credentials or a populated `.env` file.
 
+## API overview
 
-5. Start the Flask backend:
-   
-   python app.py
-   
+The original application exposes these operations:
 
-6. Open URL given by flask app in a browser to access the frontend.
+| Endpoint | Method | Purpose |
+| --- | --- | --- |
+| `/upload` | POST | Upload a PDF and associate it with a chat session |
+| `/chat` | POST | Ask a question about a session's PDF |
+| `/chatbot` | POST | Send a general chatbot message |
 
+See the application source for the exact request fields and response schema.
 
+## Engineering notes
 
-## API Documentation
+The PDF workflow follows a retrieval-augmented generation pattern: document content is transformed into embeddings, relevant context is retrieved from the vector store, and the language model generates a response using that context. Retrieval quality depends on document parsing, chunking, embedding configuration, and the selected index.
 
-### 1. Upload PDF
-- **Endpoint**: `/upload`
-- **Method**: `POST`
-- **Request**:
-  ```json
-  {
-    "file": "PDF file",
-    "chat_id": "session_id"
-  }
-  ```
-- **Response**:
-  ```json
-  {
-    "status": "success",
-    "message": "File uploaded successfully"
-  }
-  ```
+## Future improvements
 
-### 2. Chat with PDF
-- **Endpoint**: `/chat`
-- **Method**: `POST`
-- **Request**:
-  ```json
-  {
-    "chat_id": "session_id",
-    "message": "Your query"
-  }
-  ```
-- **Response**:
-  ```json
-  {
-    "reply": "Generated AI response"
-  }
-  ```
+- Add automated tests for parsing, retrieval, and API behavior.
+- Document chunking strategy, index configuration, and supported file limits.
+- Add request validation, structured error responses, and upload safeguards.
+- Provide reproducible dependency locking and a Docker-based development setup.
+- Add screenshots and a short end-to-end demo.
 
-### 3. Direct Chat
-- **Endpoint**: `/chatbot`
-- **Method**: `POST`
-- **Request**:
-  ```json
-  {
-    "message": "Your query"
-  }
-  ```
-- **Response**:
-  ```json
-  {
-    "reply": "AI-generated response"
-  }
-  ```
+## Security
 
----
-
-## Technologies Used
-- **Backend**: Flask, Pinecone, Groq API, SentenceTransformers
-- **Frontend**: HTML, CSS, JavaScript
-- **Database**: Pinecone for vector storage
-
----
-## Deployment
-
-### Docker Deployment
-
-#### Creating a Dockerfile
-Create a `Dockerfile` in the root directory:
-
-#### Building and Running the Docker Container
-
-1. **Build the Docker image:**
-  
-   docker build --no-cache -t chatapp . 
-  
-
-2. **Run the container:**
-  
-   docker run -p 5000:5000 chatapp:latest 
-   
-
-3. **Stopping the container:**
-   
-   docker ps 
-   docker stop <container_id>
-   
-**Deployment on Render**
-Setup
-
-Push code to GitHub and connect it to Render.
-Select Docker as the environment.
-Configuration
-
-Set Dockerfile path: ./Dockerfile
-Add environment variables:
-FLASK_ENV=production
-KEY=your_secret_key
-PORT=5000
-**Deployment**
-
-Create Web Service and deploy.
-Access via the provided Render URL.
+Keep provider credentials in environment variables or a secrets manager. Rotate any key that has ever been committed to source control. Avoid uploading confidential documents to third-party model or embedding services without authorization.
